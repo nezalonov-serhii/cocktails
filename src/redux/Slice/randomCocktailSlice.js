@@ -17,7 +17,6 @@ export const fetchRandomCocktails = createAsyncThunk(
 export const randomCocktailsSlice = createSlice({
   name: 'randomCocktail',
   initialState,
-  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(fetchRandomCocktails.pending, (state, action) => {

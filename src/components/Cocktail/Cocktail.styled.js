@@ -14,6 +14,7 @@ export const Thumb = styled.div`
   top: 0;
   left: 0;
 
+  flex-shrink: 0;
   border-radius: 10px;
   overflow: hidden;
 
