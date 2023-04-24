@@ -1,18 +1,11 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getRandomCocktails } from 'services/fetchRandomCocktails';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchRandomCocktails } from 'redux/thunk/cocktailsThunk';
 
 const initialState = {
   randomCocktails: [],
   isLoading: false,
   error: '',
 };
-
-export const fetchRandomCocktails = createAsyncThunk(
-  'cocktails/fetchRandom',
-  async () => {
-    return await getRandomCocktails();
-  }
-);
 
 export const randomCocktailsSlice = createSlice({
   name: 'randomCocktail',

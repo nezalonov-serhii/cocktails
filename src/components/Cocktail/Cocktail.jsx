@@ -2,10 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
-import {
-  fetchCocktails,
-  cocktailItemsSlice,
-} from 'redux/Slice/cocktailItemSlice';
+import { cocktailItemsSlice } from 'redux/Slice/cocktailItemSlice';
 import {
   CocktailSection,
   Ingredient,
@@ -14,12 +11,18 @@ import {
   Thumb,
   WrapInstruction,
 } from './Cocktail.styled';
+import { fetchCocktails } from 'redux/thunk/cocktailsThunk';
+import { SkeletonCoctails } from 'components/Skeleton/SkeletonCoctails/SkeletonCoctails';
 
 const Cocktail = () => {
   const id = useParams();
   const dispatch = useDispatch();
   const cocktail = useSelector(state => state.cocktailById.cocktail);
   const isAlcoholic = useSelector(state => state.cocktailById.isAlcoholic);
+  const isLoading = useSelector(state => state.cocktailById.isLoading);
+
+  console.log(isLoading);
+
   const cocktailComponents = getIngredients();
 
   useEffect(() => {
@@ -46,26 +49,30 @@ const Cocktail = () => {
 
   return (
     <CocktailSection className="container">
-      <Thumb isAlcoholic={isAlcoholic}>
-        <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} />
-        <h2>{cocktail.strDrink}</h2>
-        <p>{cocktail.strAlcoholic}</p>
-      </Thumb>
+      {isLoading && <SkeletonCoctails />}
+      {!isLoading && (
+        <>
+          <Thumb isAlcoholic={isAlcoholic}>
+            <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} />
+            <h2>{cocktail.strDrink}</h2>
+            <p>{cocktail.strAlcoholic}</p>
+          </Thumb>
+          <WrapInstruction>
+            <Instruction>{cocktail.strInstructions}</Instruction>
 
-      <WrapInstruction>
-        <Instruction>{cocktail.strInstructions}</Instruction>
-
-        <Ingredients>
-          {cocktailComponents.map(({ ingredient, measure }) => {
-            return (
-              <Ingredient key={nanoid()}>
-                <p>{ingredient}</p>
-                <p>{measure}</p>
-              </Ingredient>
-            );
-          })}
-        </Ingredients>
-      </WrapInstruction>
+            <Ingredients>
+              {cocktailComponents.map(({ ingredient, measure }) => {
+                return (
+                  <Ingredient key={nanoid()}>
+                    <p>{ingredient}</p>
+                    <p>{measure}</p>
+                  </Ingredient>
+                );
+              })}
+            </Ingredients>
+          </WrapInstruction>
+        </>
+      )}
     </CocktailSection>
   );
 };

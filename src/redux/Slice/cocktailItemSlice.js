@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { cocktailBuId } from 'services/fetchCocktailBuId';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchCocktails } from 'redux/thunk/cocktailsThunk';
 
 const initialState = {
   cocktail: {},
@@ -7,13 +7,6 @@ const initialState = {
   isAlcoholic: false,
   error: '',
 };
-
-export const fetchCocktails = createAsyncThunk(
-  'cocktails/fetchCocktail',
-  async id => {
-    return await cocktailBuId(id);
-  }
-);
 
 export const cocktailItemsSlice = createSlice({
   name: 'randomCocktail',
