@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { nanoid } from 'nanoid';
 
 import { fetchRandomCocktails } from 'redux/thunk/cocktailsThunk';
 import { SkeletonRandomCoktails } from 'components/Skeleton/SkeletonRandomCoktails/SkeletonRandomCoktails';
@@ -11,6 +10,7 @@ import {
   CocktailsLists,
   CocktailsSection,
 } from './RandomCocktails.styled';
+import InfiniteScroll from 'utils/infinitiScroll';
 
 const RandomCocktails = () => {
   const dispatch = useDispatch();
@@ -21,21 +21,26 @@ const RandomCocktails = () => {
     dispatch(fetchRandomCocktails());
   }, [dispatch]);
 
+  const renderItem = item => {
+    return (
+      <CocktailsItem key={item.idDrink}>
+        <Link to={`/cocktail/${item.idDrink}`}>
+          <img src={item.strDrinkThumb} alt={item.strDrink} />
+        </Link>
+      </CocktailsItem>
+    );
+  };
+
   return (
     <CocktailsSection>
       <div className="container">
         {isLoading && <SkeletonRandomCoktails quantity={6} />}
         {!isLoading && (
           <CocktailsLists>
-            {cocktails.map(cocktail => {
-              return (
-                <CocktailsItem key={nanoid()}>
-                  <Link to={`/cocktail/${cocktail.idDrink}`}>
-                    <img src={cocktail.strDrinkThumb} alt={cocktail.strDrink} />
-                  </Link>
-                </CocktailsItem>
-              );
-            })}
+            <InfiniteScroll
+              data={cocktails} // Массив данных, которые вы хотите показать
+              renderItem={renderItem} // Функция, которая возвращает рендеринг каждого элемента
+            />
           </CocktailsLists>
         )}
       </div>

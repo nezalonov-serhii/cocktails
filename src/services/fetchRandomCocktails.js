@@ -2,17 +2,25 @@ import axios from 'axios';
 
 export const getRandomCocktails = async () => {
   try {
-    const randomCocktailsPromise = [];
+    const cocktailsPromise = [];
 
-    for (let i = 0; i < 9; i++) {
-      randomCocktailsPromise.push(
-        axios.get('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-      );
-    }
+    cocktailsPromise.push(
+      axios.get(
+        'https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic'
+      )
+    );
 
-    const promAll = await Promise.all(randomCocktailsPromise);
-    return promAll.map(el => {
-      return el.data.drinks[0];
+    cocktailsPromise.push(
+      axios.get(
+        'https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic'
+      )
+    );
+
+    const promAll = await Promise.all(cocktailsPromise);
+
+    return promAll.flatMap(el => {
+      let allCocktails = [];
+      return (allCocktails = [...allCocktails, ...el.data.drinks]);
     });
   } catch (error) {
     return Promise.reject(error.message);

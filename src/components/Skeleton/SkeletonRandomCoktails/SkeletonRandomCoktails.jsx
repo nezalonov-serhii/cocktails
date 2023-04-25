@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import {
   SkeletonItem,
   SkeletonItems,
@@ -15,7 +16,7 @@ export const SkeletonRandomCoktails = ({ quantity }) => {
   return (
     <SkeletonLists>
       {arr.map(el => (
-        <SkeletonItems>{el}</SkeletonItems>
+        <SkeletonItems key={nanoid()}>{el}</SkeletonItems>
       ))}
     </SkeletonLists>
   );
